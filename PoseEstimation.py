@@ -28,25 +28,41 @@ class PoseDetector():
             self.min_detection_confidence,
             self.min_tracking_confidence
         )
+        self.results = None
 
     def findPose(self, img, draw_on_image=True):
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        results = self.pose.process(imgRGB)
+        self.results = self.pose.process(imgRGB)
 
-        if results.pose_landmarks:
+        if self.results.pose_landmarks:
             if draw_on_image:
                 self.mp_draw.draw_landmarks(
                     img,
-                    results.pose_landmarks,
+                    self.results.pose_landmarks,
                     self.mp_pose.POSE_CONNECTIONS
                 )
 
         return img
-        
-        # for index, landmark in enumerate(results.pose_landmarks.landmark):
-        #     landmark_x_coord = int(landmark.x * resized_width)
-        #     landmark_y_coord = int(landmark.y * resized_height)
-        #     cv2.circle(img, (landmark_x_coord, landmark_y_coord), 10, (255, 0, 0), cv2.FILLED)
+
+
+    def findLandmarkPositions(self, img, draw_on_image=True):
+        landmark_values = []      
+        if self.results.pose_landmarks: 
+            img_height, img_width, img_channels = img.shape
+            for index, landmark in enumerate(self.results.pose_landmarks.landmark):
+                landmark_x_coord = int(landmark.x * img_width)
+                landmark_y_coord = int(landmark.y * img_height)
+                landmark_values.append([index, landmark_x_coord, landmark_y_coord])
+                if draw_on_image:
+                    cv2.circle(
+                        img,
+                        (landmark_x_coord, landmark_y_coord),
+                        10,
+                        (255, 0, 0),
+                        cv2.FILLED
+                    )
+
+        return landmark_values
 
     
 
@@ -67,6 +83,8 @@ def main():
         img = cv2.resize(img, (resized_width, resized_height))
 
         img = pose_detector.findPose(img)
+        landmark_values = pose_detector.findLandmarkPositions(img)
+        # print(landmark_values)
 
         cTime = time.time()
         fps = 1 / (cTime - pTime)
