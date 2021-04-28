@@ -1,5 +1,5 @@
 import cv2
-from PoseEstimation import PoseDetector
+from PoseDetection import PoseDetector
 
 
 def main():
@@ -10,6 +10,8 @@ def main():
     resized_width = int(img_width/resize_ratio)
     resized_height = int(img_height/resize_ratio)
     img = cv2.resize(img, (resized_width, resized_height))
+
+    pose_detector = PoseDetector()
     
     cv2.imshow('Image', img)
     cv2.waitKey(0)
