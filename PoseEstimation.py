@@ -26,7 +26,7 @@ while True:
     results = pose.process(imgRGB)
 
     if results.pose_landmarks:
-        mpDraw.draw_landmarks(img, results.pose_landmarks)
+        mpDraw.draw_landmarks(img, results.pose_landmarks, mpPose.POSE_CONNECTIONS)
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
