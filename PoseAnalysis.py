@@ -12,6 +12,9 @@ def main():
     img = cv2.resize(img, (resized_width, resized_height))
 
     pose_detector = PoseDetector()
+    img = pose_detector.findPose(img)
+    landmark_values = pose_detector.findLandmarkPositions(img)
+    print(landmark_values)
     
     cv2.imshow('Image', img)
     cv2.waitKey(0)
