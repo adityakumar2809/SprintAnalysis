@@ -49,10 +49,13 @@ class PoseDetector():
         landmark_values = []      
         if self.results.pose_landmarks: 
             img_height, img_width, img_channels = img.shape
-            for index, landmark in enumerate(self.results.pose_landmarks.landmark):
+            landmarks = self.results.pose_landmarks.landmark
+            for index, landmark in enumerate(landmarks):
                 landmark_x_coord = int(landmark.x * img_width)
                 landmark_y_coord = int(landmark.y * img_height)
-                landmark_values.append([index, landmark_x_coord, landmark_y_coord])
+                landmark_values.append(
+                    [index, landmark_x_coord, landmark_y_coord]
+                )
                 if draw_on_image:
                     cv2.circle(
                         img,
@@ -89,7 +92,15 @@ def main():
         cTime = time.time()
         fps = 1 / (cTime - pTime)
         pTime = cTime
-        cv2.putText(img, str(int(fps)), (70, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+        cv2.putText(
+            img,
+            str(int(fps)),
+            (70, 50),
+            cv2.FONT_HERSHEY_PLAIN,
+            3,
+            (255, 0, 0),
+            3
+        )
         
         cv2.imshow('Image', img)
         cv2.waitKey(1)
