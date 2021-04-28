@@ -67,8 +67,8 @@ class PoseDetector():
                     cv2.circle(
                         img,
                         (int(landmark.x * img_width), int(landmark.y * img_height)),
-                        10,
-                        (255, 0, 0),
+                        3,
+                        (0, 0, 255),
                         cv2.FILLED
                     )
 
