@@ -1,5 +1,7 @@
 import cv2
+import sys
 import time
+import argparse
 import mediapipe as mp
 
 
@@ -51,15 +53,20 @@ class PoseDetector():
             img_height, img_width, img_channels = img.shape
             landmarks = self.results.pose_landmarks.landmark
             for index, landmark in enumerate(landmarks):
-                landmark_x_coord = int(landmark.x * img_width)
-                landmark_y_coord = int(landmark.y * img_height)
                 landmark_values.append(
-                    [index, landmark_x_coord, landmark_y_coord]
+                    {
+                        index : [
+                                    landmark.x,
+                                    landmark.y,
+                                    landmark.z,
+                                    landmark.visibility
+                                ]
+                    }
                 )
                 if draw_on_image:
                     cv2.circle(
                         img,
-                        (landmark_x_coord, landmark_y_coord),
+                        (int(landmark.x * img_width), int(landmark.y * img_height)),
                         10,
                         (255, 0, 0),
                         cv2.FILLED
@@ -70,7 +77,23 @@ class PoseDetector():
     
 
 def main():
-    cap = cv2.VideoCapture('data/video_1.mp4')
+    parser = argparse.ArgumentParser(description='Detect human pose')
+    parser.add_argument('--video', default=None, help='Path to input video')
+    parser.add_argument('--live', action='store_true', help='Flag for livestream')
+    args = parser.parse_args()
+    
+    if args.live and args.video:
+        print('Cannot use --video and --live together')
+        sys.exit()
+
+    if args.live:
+        cap = cv2.VideoCapture(0)
+    elif args.video:
+        cap = cv2.VideoCapture(args.video)
+    else:
+        print('Specify exactly one from --video and --live')
+        sys.exit()
+
     pTime = 0
     pose_detector = PoseDetector()
     while True:
@@ -80,7 +103,7 @@ def main():
 
         width  = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        resize_ratio = 3
+        resize_ratio = 1
         resized_width = int(width/resize_ratio)
         resized_height = int(height/resize_ratio)
         img = cv2.resize(img, (resized_width, resized_height))
@@ -103,8 +126,11 @@ def main():
         )
         
         cv2.imshow('Image', img)
-        cv2.waitKey(1)
-
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
