@@ -3,6 +3,7 @@ import time
 import mediapipe as mp
 
 
+mpDraw = mp.solutions.drawing_utils
 mpPose = mp.solutions.pose
 pose = mpPose.Pose()
 
@@ -23,6 +24,9 @@ while True:
     
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = pose.process(imgRGB)
+
+    if results.pose_landmarks:
+        mpDraw.draw_landmarks(img, results.pose_landmarks)
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
