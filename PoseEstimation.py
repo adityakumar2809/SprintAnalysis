@@ -27,6 +27,11 @@ while True:
 
     if results.pose_landmarks:
         mpDraw.draw_landmarks(img, results.pose_landmarks, mpPose.POSE_CONNECTIONS)
+        
+        for index, landmark in enumerate(results.pose_landmarks.landmark):
+            landmark_x_coord = int(landmark.x * resized_width)
+            landmark_y_coord = int(landmark.y * resized_height)
+            cv2.circle(img, (landmark_x_coord, landmark_y_coord), 10, (255, 0, 0), cv2.FILLED)
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
