@@ -4,12 +4,23 @@ import numpy as np
 from PoseDetection import PoseDetector
 
 
+def getAngleBetweenVectors(vector_1, vector_2):
+    unit_vector_1 = vector_1 / np.linalg.norm(vector_1)
+    unit_vector_2 = vector_2 / np.linalg.norm(vector_2)
+    dot_product = np.dot(unit_vector_1, unit_vector_2)
+    angle = (np.arccos(dot_product) * 180 / math.pi)
+
+    return angle
+
+
 def findJointFlexAngle(extension_1, joint, extension_2, frame_dimensions):
     '''Find the angle being formed at the joint'''
+    # Consider only x and y coordinate
     extension_1 = [extension_1[0], extension_1[1]]
     joint = [joint[0], joint[1]]
     extension_2 = [extension_2[0], extension_2[1]]
 
+    # Convert ratios into absolute length
     extension_1 = [extension_1[i] * frame_dimensions[i] for i in range(2)]
     joint = [joint[i] * frame_dimensions[i] for i in range(2)]
     extension_2 = [extension_2[i] * frame_dimensions[i] for i in range(2)]
@@ -17,12 +28,9 @@ def findJointFlexAngle(extension_1, joint, extension_2, frame_dimensions):
     vector_1 = [x - y for (x, y) in zip(extension_1, joint)]
     vector_2 = [x - y for (x, y) in zip(extension_2, joint)]
 
-    unit_vector_1 = vector_1 / np.linalg.norm(vector_1)
-    unit_vector_2 = vector_2 / np.linalg.norm(vector_2)
-    dot_product = np.dot(unit_vector_1, unit_vector_2)
-    angle = np.arccos(dot_product)
+    angle = getAngleBetweenVectors(vector_1, vector_2)
 
-    print(angle * 180 / math.pi)
+    return angle
 
 
 def main():
@@ -41,30 +49,9 @@ def main():
     left_hip = list(landmark_values[PoseDetector.LANDMARK_DICT['left_hip']].values())[0]
     left_knee = list(landmark_values[PoseDetector.LANDMARK_DICT['left_knee']].values())[0]
     left_ankle = list(landmark_values[PoseDetector.LANDMARK_DICT['left_ankle']].values())[0]
-
-    cv2.circle(
-        img,
-        (int(left_hip[0] * resized_width), int(left_hip[1] * resized_height)),
-        5,
-        (0, 0, 255),
-        cv2.FILLED
-    )
-    cv2.circle(
-        img,
-        (int(left_knee[0] * resized_width), int(left_knee[1] * resized_height)),
-        5,
-        (0, 255, 0),
-        cv2.FILLED
-    )
-    cv2.circle(
-        img,
-        (int(left_ankle[0] * resized_width), int(left_ankle[1] * resized_height)),
-        5,
-        (255, 0, 0),
-        cv2.FILLED
-    )
     
-    findJointFlexAngle(left_hip, left_knee, left_ankle, [resized_width, resized_height])
+    angle = findJointFlexAngle(left_hip, left_knee, left_ankle, [resized_width, resized_height])
+    print(angle)
     
     cv2.imshow('Image', img)
     cv2.waitKey(0)
