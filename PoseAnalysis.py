@@ -55,6 +55,35 @@ def smooth(y, box_pts):
     y_smooth = np.convolve(y, box, mode='same')
     return y_smooth
 
+
+def plotJointAngles(landmark_values_list, frame_dimension):
+    JOINT_EXTENSION_TRIPLETS = [
+        ['left_hip', 'left_knee', 'left_ankle'],
+        ['right_hip', 'right_knee', 'right_ankle'],
+        ['left_shoulder', 'left_elbow', 'left_wrist'],
+        ['right_shoulder', 'right_elbow', 'right_wrist']
+    ]
+
+    for index, joint_triplet in enumerate(JOINT_EXTENSION_TRIPLETS):
+        angles = []
+        for landmark_values in landmark_values_list:
+            angle = findJointFlexAngle(
+                landmark_values,
+                joint_triplet[0],
+                joint_triplet[1],
+                joint_triplet[2],
+                frame_dimension
+            )
+            angles.append(angle)
+        plt.subplot(2, 2, index + 1)
+        plt.plot([f + 1 for f in range(len(angles))], angles, color='lightseagreen', linestyle=':')
+        plt.plot([f + 1 for f in range(len(angles))], smooth(angles, 19), color='lightcoral', linewidth=3.0)
+
+    plt.show()
+            
+
+
+
 def main():
 
     parser = argparse.ArgumentParser(description='Detect human pose')
@@ -75,7 +104,7 @@ def main():
         sys.exit()
 
     pTime = 0
-    angles = []
+    landmark_values_list = []
 
     pose_detector = PoseDetector()
     while True:
@@ -94,14 +123,7 @@ def main():
         landmark_values = pose_detector.findLandmarkPositions(img)
         
         if len(landmark_values) > 0:
-            angle = findJointFlexAngle(
-                landmark_values,
-                'left_hip',
-                'left_knee',
-                'left_ankle',
-                [resized_width, resized_height]
-            )
-            angles.append(angle)
+            landmark_values_list.append(landmark_values)
 
         cTime = time.time()
         fps = 1 / (cTime - pTime)
@@ -123,11 +145,7 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
-    fig = plt.figure()
-    plt.plot([f + 1 for f in range(len(angles))], angles, color='lightseagreen', linestyle=':')
-    plt.plot([f + 1 for f in range(len(angles))], smooth(angles, 19), color='lightcoral', linewidth=4.0)
-    # plt.plot([f + 1 for f in range(50)], angles[:50], color='b')
-    plt.show()
+    plotJointAngles(landmark_values_list, [resized_width, resized_height])
 
 
 if __name__ == '__main__':
