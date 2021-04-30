@@ -2,6 +2,7 @@ import cv2
 import sys
 import time
 import math
+import pickle
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -61,7 +62,13 @@ def plotJointAngles(landmark_values_list, frame_dimension):
         ['left_hip', 'left_knee', 'left_ankle'],
         ['right_hip', 'right_knee', 'right_ankle'],
         ['left_shoulder', 'left_elbow', 'left_wrist'],
-        ['right_shoulder', 'right_elbow', 'right_wrist']
+        ['right_shoulder', 'right_elbow', 'right_wrist'],
+        ['left_shoulder', 'left_hip', 'left_knee'],
+        ['right_shoulder', 'right_hip', 'right_knee'],
+        ['left_knee', 'left_ankle', 'left_heel'],
+        ['right_knee', 'right_ankle', 'right_heel'],
+        ['left_ear', 'left_shoulder', 'left_elbow'],
+        ['right_ear', 'right_shoulder', 'right_elbow'],
     ]
 
     for index, joint_triplet in enumerate(JOINT_EXTENSION_TRIPLETS):
@@ -75,16 +82,37 @@ def plotJointAngles(landmark_values_list, frame_dimension):
                 frame_dimension
             )
             angles.append(angle)
-        plt.subplot(2, 2, index + 1)
-        plt.plot([f + 1 for f in range(len(angles))], angles, color='lightseagreen', linestyle=':')
-        plt.plot([f + 1 for f in range(len(angles))], smooth(angles, 19), color='lightcoral', linewidth=3.0)
+        ax = plt.subplot(2, 5, index + 1)
+        axes_title = joint_triplet[1].replace('_', ' ').title()
+        ax.set_title(axes_title)
+        plt.plot(
+            [f + 1 for f in range(len(angles))],
+            angles,
+            color='lightseagreen',
+            linestyle=':'
+        )
+        plt.plot(
+            [f + 1 for f in range(len(angles))],
+            smooth(angles, 19),
+            color='lightcoral',
+            linewidth=3.0
+        )
 
+    fig = plt.gcf()
+    fig.suptitle(
+        'Sprint Joint Angle Analysis: Joint Angle(in rad) vs Frame',
+        fontsize=16    
+    )
     plt.show()
             
 
 
 
 def main():
+
+    # landmark_values_list = pickle.load(open('result.landmark_values.pkl', 'rb'))
+    # plotJointAngles(landmark_values_list, [960, 720])
+    # return
 
     parser = argparse.ArgumentParser(description='Detect human pose')
     parser.add_argument('--video', default=None, help='Path to input video')
@@ -145,6 +173,7 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
+    pickle.dump(landmark_values_list, open('result/landmark_values.pkl', 'wb'))
     plotJointAngles(landmark_values_list, [resized_width, resized_height])
 
 
