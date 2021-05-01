@@ -115,6 +115,7 @@ class PoseDetector():
 def main():
     parser = argparse.ArgumentParser(description='Detect human pose')
     parser.add_argument('--video', default=None, help='Path to input video')
+    parser.add_argument('--url', default=None, help='URL to stream')
     parser.add_argument('--live', action='store_true', help='Flag for livestream')
     args = parser.parse_args()
     
@@ -126,6 +127,8 @@ def main():
         cap = cv2.VideoCapture(0)
     elif args.video:
         cap = cv2.VideoCapture(args.video)
+    elif args.url:
+        cap = cv2.VideoCapture(f'{args.url}/video')
     else:
         print('Specify exactly one from --video and --live')
         sys.exit()
@@ -139,7 +142,7 @@ def main():
 
         width  = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        resize_ratio = 1
+        resize_ratio = 2
         resized_width = int(width/resize_ratio)
         resized_height = int(height/resize_ratio)
         img = cv2.resize(img, (resized_width, resized_height))
