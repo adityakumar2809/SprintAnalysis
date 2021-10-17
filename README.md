@@ -26,7 +26,7 @@ The methodology for the project is explained as follows:
 
 <img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/pose_tracking_full_body_landmarks.png" alt="Landmarks Across the Body" width="600px" />
 
-<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/PoseDetection.jpg" alt="Detected Landmarks" width="600px" />
+<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/PoseDetection.jpg" alt="Detected Landmarks" width="300px" />
 
 * Using three consecutive joints as points and cosine rule as a mathematical tool, the angle formed by the middle joint is represented (Right Shoulder, Right Elbow, Right Wrist gives the angle formed at the Right Elbow)
 
