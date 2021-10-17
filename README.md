@@ -24,9 +24,9 @@ The methodology for the project is explained as follows:
 * Each still frame is taken into consideration, one-by-one and a pose detection algorithm is run on it
 * The pose detection algorithm finds the various joints of the body as landmarks and returns their locations as X and Y Coordinates
 
-![Landmarks Across the Body](https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/pose_tracking_full_body_landmarks.png)
+<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/pose_tracking_full_body_landmarks.png" alt="Landmarks Across the Body" width="600px" />
 
-![Detected Landmarks](https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/PoseDetection.jpg)
+<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/PoseDetection.jpg" alt="Detected Landmarks" width="600px" />
 
 * Using three consecutive joints as points and cosine rule as a mathematical tool, the angle formed by the middle joint is represented (Right Shoulder, Right Elbow, Right Wrist gives the angle formed at the Right Elbow)
 
@@ -36,7 +36,7 @@ The methodology for the project is explained as follows:
 * These angles are continuously recorded with time and its values are recorded
 * Smoothening functions are utilized to smoothen any noise found in the angles obtained
 
-![Graph Smoothening](https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/GraphSmoothening.png)
+<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/GraphSmoothening.png" alt="Graph Smoothening" width="600px" />
 
 * The resulting data is then superimposed with the data of trained atheletes to the the offset
 
