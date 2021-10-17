@@ -36,11 +36,11 @@ The methodology for the project is explained as follows:
 * These angles are continuously recorded with time and its values are recorded
 * Smoothening functions are utilized to smoothen any noise found in the angles obtained
 
-<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/GraphSmoothening.png" alt="Graph Smoothening" width="600px" />
+<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/GraphSmoothening.png" alt="Graph Smoothening" width="500px" />
 
 * The resulting data is then superimposed with the data of trained atheletes to the the offset
 
-![LiveRunning](https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/LiveRunning.png)
+<img src="https://github.com/adityakumar2809/SprintAnalysis/blob/master/info/LiveRunning.png" alt="LiveRunning" width="500px" />
 
 * If the offset is within the given threshold, the athelete is good for the run, otherwise he/she is disqualified for the long run
 
