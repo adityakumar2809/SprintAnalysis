@@ -1,4 +1,4 @@
-# Sprint Analysis
+# Analysis of Short Duration Sprints to Evaluate Endurance of Athletes for Longer Runs
 
 ## Introduction
 The movement of various muscles and joints in continuous synchronization across the body is extremely essential when it comes to successful sprint over long distances. Understanding of biomechanical factors in sprint running is useful because of their critical value to performance. At the beginning of the sprint run, it is important to produce great force/ power and generate high velocity in the block and acceleration phases. During the constant-speed phase, the events immediately before and during the braking phase are important in increasing explosive force/power and efficiency of movement in the propulsion phase. All of the aforementioned factors can be easily analysedusing the various joints and muscle movements across the body of the athelete.
